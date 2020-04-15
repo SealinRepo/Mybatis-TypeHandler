@@ -16,23 +16,34 @@ import java.util.UUID;
  */
 public class UuidTypeHandler extends BaseTypeHandler<UUID> {
     @Override
-    public void setNonNullParameter(PreparedStatement preparedStatement, int i, UUID uuid, JdbcType jdbcType)
-    throws SQLException {
-
+    public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
+        ps.setString(i, parameter.toString());
     }
 
     @Override
-    public UUID getNullableResult(ResultSet resultSet, String s) throws SQLException {
+    public UUID getNullableResult(ResultSet rs, String columnName) throws SQLException {
+        String value = rs.getString(columnName);
+        if (value != null) {
+            return UUID.fromString(value);
+        }
         return null;
     }
 
     @Override
-    public UUID getNullableResult(ResultSet resultSet, int i) throws SQLException {
+    public UUID getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+        String value = rs.getString(columnIndex);
+        if (value != null) {
+            return UUID.fromString(value);
+        }
         return null;
     }
 
     @Override
-    public UUID getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
+    public UUID getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+        String value = cs.getString(columnIndex);
+        if (value != null) {
+            return UUID.fromString(value);
+        }
         return null;
     }
 }
